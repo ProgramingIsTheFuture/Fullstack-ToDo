@@ -6,7 +6,7 @@ let server =
 
   (Server.make ~callback: 
     (Middleware.logger 
-      (fun _conn _ _ -> "Hello")) ()) 
+      Router.router) ()) 
   |> Server.create ~mode:(`TCP (`Port 8000)) 
   ;;
 

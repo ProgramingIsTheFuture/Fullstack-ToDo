@@ -3,5 +3,6 @@
  (name main)
  (libraries 
   middleware 
+  router
   cohttp-lwt-unix 
   cohttp-async))
