@@ -1,4 +1,7 @@
 (executable
  (public_name backend)
  (name main)
- (libraries backend cohttp-lwt-unix cohttp-async))
+ (libraries 
+  middleware 
+  cohttp-lwt-unix 
+  cohttp-async))
