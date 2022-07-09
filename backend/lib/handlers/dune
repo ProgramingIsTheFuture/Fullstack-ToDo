@@ -1,0 +1,9 @@
+(library
+ (name handlers)
+ (libraries 
+  cohttp-lwt-unix 
+  cohttp-async
+  yojson
+  )
+ (preprocess
+  (pps ppx_yojson_conv)))

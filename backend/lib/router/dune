@@ -2,4 +2,5 @@
  (name router)
  (libraries 
   cohttp-lwt-unix 
-  cohttp-async))
+  cohttp-async
+  handlers))

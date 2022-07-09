@@ -23,7 +23,9 @@
    ocaml 
    dune
    cohttp-lwt-unix 
-   cohttp-async)
+   cohttp-async
+   yojson
+   ppx_yojson_conv)
  (tags
   (topics "to describe" your project)))
 
