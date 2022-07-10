@@ -1,21 +1,43 @@
 /** @jsx h */
 import { h } from "preact";
 import { tw } from "@twind";
-import Counter from "../islands/Counter.tsx";
+import { Handlers, PageProps } from "$fresh/server.ts";
+import CreateTodo from "../islands/CreateTodo.tsx";
 
-export default function Home() {
+interface Todo {
+  id: number;
+  todo: string;
+}
+
+export const handler: Handlers<Todo[] | null> = {
+  async GET(_: any, ctx: any) {
+    try {
+      const resp = await fetch(`http://localhost:8000/`);
+      const data = await resp.json();
+      const todo: Todo = await data.data;
+      return ctx.render(todo);
+    } catch (e) {
+      return ctx.render(null);
+    }
+  },
+};
+
+export default function Home({ data }: PageProps<Todo[] | null>) {
   return (
-    <div class={tw`p-4 mx-auto max-w-screen-md`}>
-      <img
-        src="/logo.svg"
-        height="100px"
-        alt="the fresh logo: a sliced lemon dripping with juice"
-      />
-      <p class={tw`my-6`}>
-        Welcome to `fresh`. Try update this message in the ./routes/index.tsx
-        file, and refresh.
-      </p>
-      <Counter start={3} />
+    <div class={tw`max-w-screen-md`}>
+      <h1 class={tw``}>First fresh website</h1>
+      <CreateTodo />
+      {data
+        ? data.map((i: Todo) => (
+          <div key={i.id}>
+            {i.todo}
+          </div>
+        ))
+        : (
+          <div class={tw`text-lg italic font-medium`}>
+            To do are not available
+          </div>
+        )}
     </div>
   );
 }
