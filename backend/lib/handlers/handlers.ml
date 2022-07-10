@@ -41,7 +41,7 @@ let create_todo _conn _req _body =
   | Return (v) -> 
     (* Parses the string from body to json *)
     let new_t = Yojson.Safe.from_string v |> todo_of_yojson in
-    todos := new_t:: !todos;
+    todos := {id = (List.hd !todos).id + 1; todo = new_t.todo}:: !todos;
     (* Returns a response *)
     let js = yojson_of_message {message = "Created!"; data = None} |> to_string in
     Server.respond
