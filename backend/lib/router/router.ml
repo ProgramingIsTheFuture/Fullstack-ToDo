@@ -7,6 +7,7 @@ let router _conn req body =
   let meth = req |> Request.meth |> Code.string_of_method in
   match (path, meth) with
   | ("/", "GET") -> Handlers.base_get _conn req body
+  | ("/create", "POST") -> Handlers.create_todo _conn req body
   | _ -> 
     Handlers.not_found _conn req body;;
 
