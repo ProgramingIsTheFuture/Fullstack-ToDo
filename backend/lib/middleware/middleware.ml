@@ -15,8 +15,17 @@ let logger_opium =
 
 let cors_opium =
   let filter (handler: Rock.Request.t -> Rock.Response.t Lwt.t) (req: Rock.Request.t) =
-    handler (Rock.Request.make ~version:req.version ~headers:(Httpaf.Headers.add req.headers "Access-Control-Allow-Origin" "*")
-               ~body:req.body ~env:req.env req.target req.meth)
+    Lwt.bind (handler req)
+      (fun resp ->
+         Lwt.return (Rock.Response.make
+                       ~headers:(Httpaf.Headers.add req.headers "Access-Control-Allow-Origin" "*")
+                       ~body:resp.body
+                       ~env:resp.env
+                       ~version:resp.version
+                       ~status:resp.status
+                       ~reason:(match resp.reason with | Some s -> s | None -> "")
+                       ())
+      )
   in
   Rock.Middleware.create ~filter ~name: "cors";;
 

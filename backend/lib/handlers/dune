@@ -4,6 +4,7 @@
   cohttp-lwt-unix 
   cohttp-async
   yojson
+  opium
   )
  (preprocess
   (pps ppx_yojson_conv)))

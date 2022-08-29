@@ -24,8 +24,8 @@ let base_get _conn _req _body =
   let data: todo list option = Some !todos in
   (* Converting the list of todos to json string *)
   let js = yojson_of_message 
-    {message = "Success"; data = data} 
-    |> to_string in
+      {message = "Success"; data = data}
+           |> to_string in
 
   (* sending the response *)
   Server.respond
@@ -49,7 +49,7 @@ let create_todo _conn _req _body =
       ~status:`Created 
       ~body:(Cohttp_lwt.Body.of_string js) 
       ()
-  | _ -> 
+  | _ ->
     (* Returns a bad response *)
     let js = yojson_of_message {message = "Body missing"; data = None} |> to_string in
     Server.respond 
@@ -65,3 +65,7 @@ let not_found _conn _req _body =
     ~status:`Not_found 
     ~body:(Cohttp_lwt.Body.of_string js) 
     ();;
+
+let not_found_opium _req =
+  Lwt.return (Opium.Headers.of_list [("Content-Type", "application/json")],
+              Opium.Body.of_string (Yojson.Safe.to_string (yojson_of_message {message = "Not Found"; data = None})))
