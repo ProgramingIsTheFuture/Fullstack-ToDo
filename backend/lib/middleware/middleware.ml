@@ -3,16 +3,33 @@ open Cohttp
 open Cohttp_lwt_unix
 open Lwt
 
+let logger_opium =
+  let filter (handler: Rock.Request.t -> Rock.Response.t Lwt.t) (req: Rock.Request.t) =
+    let resp = handler req in
+    Lwt.bind resp (fun rp ->
+        Lwt_fmt.printf "Status: %d Method: %s PATH: %s\n" (Httpaf.Status.to_code rp.status) (Httpaf.Method.to_string req.meth) (req.target)|> ignore;
+        Lwt.return rp;
+      )
+  in
+  Rock.Middleware.create ~filter ~name: "logger";;
+
+let cors_opium =
+  let filter (handler: Rock.Request.t -> Rock.Response.t Lwt.t) (req: Rock.Request.t) =
+    handler (Rock.Request.make ~version:req.version ~headers:(Httpaf.Headers.add req.headers "Access-Control-Allow-Origin" "*")
+               ~body:req.body ~env:req.env req.target req.meth)
+  in
+  Rock.Middleware.create ~filter ~name: "cors";;
+
 (* Logs all the endpoints *)
 let logger f _conn req body =
   (* Handling the request *)
   let r: (Cohttp.Response.t * Cohttp_lwt.Body.t) Lwt.t = f _conn req body in
   (* Getting the status code *)
   let status = match state r with
-  | Return (v) ->
+    | Return (v) ->
       let (ss, _) = v in
       Code.code_of_status ss.status
-  | _ -> 0 in
+    | _ -> 0 in
   (* Getting the path  *)
   let path = req |> Request.uri |> Uri.path in
   (* Getting the method  *)

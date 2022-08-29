@@ -25,7 +25,8 @@
    cohttp-lwt-unix 
    cohttp-async
    yojson
-   ppx_yojson_conv)
+   ppx_yojson_conv
+   opium)
  (tags
   (topics "to describe" your project)))
 

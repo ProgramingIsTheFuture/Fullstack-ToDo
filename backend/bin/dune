@@ -5,4 +5,5 @@
   middleware 
   router
   cohttp-lwt-unix 
-  cohttp-async))
+  cohttp-async
+  opium))

@@ -2,4 +2,5 @@
  (name middleware)
  (libraries 
   cohttp-lwt-unix 
-  cohttp-async))
+  cohttp-async
+  opium))
