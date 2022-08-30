@@ -19,6 +19,8 @@
 let _ =
   Opium.App.empty
   |> Opium.App.not_found Handlers.not_found_opium
+  |> Opium.App.get "/" Handlers.base_get_opium
+  |> Opium.App.post "/create" Handlers.create_todo_opium
   |> Opium.App.middleware Middleware.cors_opium
   |> Opium.App.middleware Middleware.logger_opium
   |> Opium.App.port 8000
