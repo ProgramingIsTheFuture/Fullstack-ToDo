@@ -6,4 +6,5 @@
   router
   cohttp-lwt-unix 
   cohttp-async
-  opium))
+  opium
+  dream))

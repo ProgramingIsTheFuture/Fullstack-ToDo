@@ -17,6 +17,7 @@ depends: [
   "yojson"
   "ppx_yojson_conv"
   "opium"
+  "dream"
   "odoc" {with-doc}
 ]
 build: [
